@@ -2,14 +2,11 @@ package com.api.productmanagementapi.controller;
 
 import com.api.productmanagementapi.entity.Product;
 import com.api.productmanagementapi.service.ProductService;
-import org.springframework.http.HttpStatus;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
-@RestController
-@RequestMapping("/api/products")
+@org.springframework.web.bind.annotation.RestController
+@org.springframework.web.bind.annotation.RequestMapping("/api/products")
 public class ProductController {
 
     private final ProductService service;
@@ -18,44 +15,44 @@ public class ProductController {
         this.service = service;
     }
 
-    @GetMapping
-    public ResponseEntity<List<Product>> getAllProducts() {
-        return new ResponseEntity<>(service.all(), HttpStatus.OK);
+    @org.springframework.web.bind.annotation.GetMapping
+    public org.springframework.http.ResponseEntity<List<Product>> getAllProducts() {
+        return new org.springframework.http.ResponseEntity<>(service.all(), org.springframework.http.HttpStatus.OK);
     }
 
-    @GetMapping("/{id}")
-    public ResponseEntity<Product> getProductById(@PathVariable Long id) {
+    @org.springframework.web.bind.annotation.GetMapping("/{id}")
+    public org.springframework.http.ResponseEntity<Product> getProductById(@org.springframework.web.bind.annotation.PathVariable Long id) {
         try {
             Product product = service.get(id);
-            return new ResponseEntity<>(product, HttpStatus.OK);
+            return new org.springframework.http.ResponseEntity<>(product, org.springframework.http.HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new org.springframework.http.ResponseEntity<>(null, org.springframework.http.HttpStatus.NOT_FOUND);
         }
     }
 
-    @PostMapping
-    public ResponseEntity<Product> createProduct(@RequestBody Product product) {
+    @org.springframework.web.bind.annotation.PostMapping
+    public org.springframework.http.ResponseEntity<Product> createProduct(@org.springframework.web.bind.annotation.RequestBody Product product) {
         Product created = service.create(product);
-        return new ResponseEntity<>(created, HttpStatus.CREATED);
+        return new org.springframework.http.ResponseEntity<>(created, org.springframework.http.HttpStatus.CREATED);
     }
 
-    @PutMapping("/{id}")
-    public ResponseEntity<Product> updateProduct(@PathVariable Long id, @RequestBody Product product) {
+    @org.springframework.web.bind.annotation.PutMapping("/{id}")
+    public org.springframework.http.ResponseEntity<Product> updateProduct(@org.springframework.web.bind.annotation.PathVariable Long id, @org.springframework.web.bind.annotation.RequestBody Product product) {
         try {
             Product updated = service.update(id, product);
-            return new ResponseEntity<>(updated, HttpStatus.OK);
+            return new org.springframework.http.ResponseEntity<>(updated, org.springframework.http.HttpStatus.OK);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(null, HttpStatus.NOT_FOUND);
+            return new org.springframework.http.ResponseEntity<>(null, org.springframework.http.HttpStatus.NOT_FOUND);
         }
     }
 
-    @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteProduct(@PathVariable Long id) {
+    @org.springframework.web.bind.annotation.DeleteMapping("/{id}")
+    public org.springframework.http.ResponseEntity<Void> deleteProduct(@org.springframework.web.bind.annotation.PathVariable Long id) {
         try {
             service.delete(id);
-            return new ResponseEntity<>(HttpStatus.NO_CONTENT);
+            return new org.springframework.http.ResponseEntity<>(org.springframework.http.HttpStatus.NO_CONTENT);
         } catch (IllegalArgumentException e) {
-            return new ResponseEntity<>(HttpStatus.NOT_FOUND);
+            return new org.springframework.http.ResponseEntity<>(org.springframework.http.HttpStatus.NOT_FOUND);
         }
     }
 }
