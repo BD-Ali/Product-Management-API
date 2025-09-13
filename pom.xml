@@ -22,7 +22,6 @@
     </properties>
 
     <dependencies>
-        <!-- Spring starters -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-data-jpa</artifactId>
@@ -36,23 +35,18 @@
             <artifactId>spring-boot-starter-actuator</artifactId>
         </dependency>
 
-        <!-- Database driver -->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <scope>runtime</scope>
-            <!-- version is managed by Spring Boot; you can pin it if you want -->
-            <!-- <version>42.7.7</version> -->
         </dependency>
 
-        <!-- Lombok (compile-time only) -->
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
             <optional>true</optional>
         </dependency>
 
-        <!-- Test -->
         <dependency>
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-test</artifactId>
@@ -72,7 +66,6 @@
 
     <build>
         <plugins>
-            <!-- Ensures proper annotation processing for Lombok and sets Java release -->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -88,7 +81,6 @@
                 </configuration>
             </plugin>
 
-            <!-- Spring Boot packaging/run support -->
             <plugin>
                 <groupId>org.springframework.boot</groupId>
                 <artifactId>spring-boot-maven-plugin</artifactId>

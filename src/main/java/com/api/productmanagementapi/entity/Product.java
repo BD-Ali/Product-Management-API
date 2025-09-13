@@ -6,6 +6,8 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
 
+import java.math.BigDecimal;
+
 @Getter
 @Setter
 @AllArgsConstructor
@@ -24,7 +26,7 @@ public class Product {
     @PositiveOrZero(message = "price must be >= 0")
     @Digits(integer = 10, fraction = 2, message = "price must have max 10 digits and 2 decimals")
     @Column(nullable = false, precision = 12, scale = 2)
-    private @PositiveOrZero Double price;
+    private BigDecimal price;
 
     @NotNull(message = "quantity must not be null")
     @Min(value = 0, message = "quantity must be >= 0")
