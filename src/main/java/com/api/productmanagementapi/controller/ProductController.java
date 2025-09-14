@@ -19,19 +19,19 @@ public class ProductController {
 
     @GetMapping
     public List<Product> getAll() {
-        return service.all(); // 200 OK by default
+        return service.all();
     }
 
     @GetMapping("/{id}")
     public Product getOne(@PathVariable Long id) {
-        return service.get(id); // throws IllegalArgumentException if missing → 404
+        return service.get(id);
     }
 
     @PostMapping
     public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
         Product created = service.create(product);
         return ResponseEntity
-                .created(URI.create("/api/products/" + created.getId())) // Location header
+                .created(URI.create("/api/products/" + created.getId()))
                 .body(created);
     }
 
@@ -43,6 +43,6 @@ public class ProductController {
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.noContent().build(); // 204
+        return ResponseEntity.noContent().build();
     }
 }
