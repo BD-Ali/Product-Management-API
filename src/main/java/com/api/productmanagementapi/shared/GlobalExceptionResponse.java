@@ -2,6 +2,7 @@ package com.api.productmanagementapi.shared;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.web.bind.annotation.ControllerAdvice;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
@@ -24,6 +25,11 @@ public class GlobalExceptionResponse {
     public ResponseEntity<GlobalResponse<?>> handleGenericException(Exception ex) {
         var errors = List.of(new GlobalResponse.ErrorItem("Internal server error"));
         return new ResponseEntity<>(new GlobalResponse<>(errors), HttpStatus.INTERNAL_SERVER_ERROR);
+    }
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<GlobalResponse<Void>> handleUnreadable(HttpMessageNotReadableException ex) {
+        return ResponseEntity.badRequest()
+                .body(new GlobalResponse<>(List.of(new GlobalResponse.ErrorItem("Invalid or missing request body"))));
     }
 
 }
