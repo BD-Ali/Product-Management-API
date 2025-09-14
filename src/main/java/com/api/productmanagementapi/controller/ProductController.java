@@ -2,6 +2,7 @@ package com.api.productmanagementapi.controller;
 
 import com.api.productmanagementapi.entity.Product;
 import com.api.productmanagementapi.service.ProductService;
+import com.api.productmanagementapi.shared.GlobalResponse;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
@@ -18,31 +19,34 @@ public class ProductController {
     private final ProductService service;
 
     @GetMapping
-    public List<Product> getAll() {
-        return service.all();
+    public ResponseEntity<GlobalResponse<List<Product>>> getAllProducts() {
+        return ResponseEntity.ok(GlobalResponse.success(service.all()));
     }
 
     @GetMapping("/{id}")
-    public Product getOne(@PathVariable Long id) {
-        return service.get(id);
+    public ResponseEntity<GlobalResponse<Product>> getProductById(@PathVariable Long id) {
+        return ResponseEntity.ok(GlobalResponse.success(service.get(id)));
     }
 
-    @PostMapping
-    public ResponseEntity<Product> create(@RequestBody @Valid Product product) {
+    @PostMapping(consumes = "application/json")
+    public ResponseEntity<GlobalResponse<Product>> createProduct(@Valid @RequestBody Product product) {
         Product created = service.create(product);
+        URI location = URI.create("/api/products/" + created.getId());
         return ResponseEntity
-                .created(URI.create("/api/products/" + created.getId()))
-                .body(created);
+                .created(location)
+                .body(GlobalResponse.success(created));
     }
 
-    @PutMapping("/{id}")
-    public Product update(@PathVariable Long id, @RequestBody Product product) {
-        return service.update(id, product);
+    @PutMapping(value = "/{id}", consumes = "application/json")
+    public ResponseEntity<GlobalResponse<Product>> updateProduct(@PathVariable Long id,
+                                                                 @RequestBody Product product) {
+        Product updated = service.update(id, product);
+        return ResponseEntity.ok(GlobalResponse.success(updated));
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> delete(@PathVariable Long id) {
+    public ResponseEntity<GlobalResponse<Void>> deleteProduct(@PathVariable Long id) {
         service.delete(id);
-        return ResponseEntity.noContent().build();
+        return ResponseEntity.ok(GlobalResponse.message("Product deleted"));
     }
 }

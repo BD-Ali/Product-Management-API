@@ -23,6 +23,13 @@ public class GlobalResponse<T> {
         this.data = data;
         this.errors = null;
     }
+    public static <T> GlobalResponse<T> success(T data) {
+        return new GlobalResponse<>(data);
+    }
+    public static <T> GlobalResponse<T> message(String msg) {
+        return new GlobalResponse<>(List.of(new ErrorItem(msg)));
+    }
+
 
 }
 
