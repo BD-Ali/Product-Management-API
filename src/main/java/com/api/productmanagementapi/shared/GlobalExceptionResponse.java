@@ -1,5 +1,6 @@
 package com.api.productmanagementapi.shared;
 
+import jakarta.validation.ConstraintViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -11,6 +12,8 @@ import java.util.List;
 
 @ControllerAdvice
 public class GlobalExceptionResponse {
+
+
     @ExceptionHandler(NoResourceFoundException.class)
     public ResponseEntity<GlobalResponse<?>> handleNoResourceFoundException(NoResourceFoundException ex) {
         var errors = List.of(new GlobalResponse.ErrorItem("Resource not found"));
