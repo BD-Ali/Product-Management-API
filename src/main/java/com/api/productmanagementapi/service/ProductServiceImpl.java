@@ -32,12 +32,6 @@ public class ProductServiceImpl implements ProductService {
 
     @Override
     public Product create(Product p) {
-        if (p.getPrice() != null && p.getPrice().doubleValue() < 0) {
-            throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Price cannot be negative");
-        }
-        if (p.getQuantity() != null && p.getQuantity() < 0) {
-            throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Quantity cannot be negative");
-        }
         return repo.save(p);
     }
 
