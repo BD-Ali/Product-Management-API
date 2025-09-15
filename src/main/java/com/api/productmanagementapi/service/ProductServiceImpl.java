@@ -12,10 +12,10 @@ import java.util.List;
 
 @Service
 @Transactional
-public class ProductServiceLmpl implements ProductService {
+public class ProductServiceImpl implements ProductService {
     private final ProductRepository repo;
 
-    public ProductServiceLmpl(@Qualifier("productRepository") ProductRepository repo) {
+    public ProductServiceImpl(@Qualifier("productRepository") ProductRepository repo) {
         this.repo = repo;
     }
 
