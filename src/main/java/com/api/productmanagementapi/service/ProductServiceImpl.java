@@ -42,17 +42,29 @@ public class ProductServiceImpl implements ProductService {
         if (p.getName() != null) {
             existing.setName(p.getName());
         }
+        else
+        {
+            throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Name cannot be null");
+        }
         if (p.getPrice() != null) {
             if (p.getPrice().doubleValue() < 0) {
                 throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Price cannot be negative");
             }
             existing.setPrice(p.getPrice());
         }
+        else
+        {
+            throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Price cannot be null");
+        }
         if (p.getQuantity() != null) {
             if (p.getQuantity() < 0) {
                 throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Quantity cannot be negative");
             }
             existing.setQuantity(p.getQuantity());
+        }
+        else
+        {
+            throw new CustomResponseException(HttpStatus.BAD_REQUEST.value(),"Quantity cannot be null");
         }
 
         return repo.save(existing);
