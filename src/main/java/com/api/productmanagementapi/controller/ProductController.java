@@ -41,7 +41,7 @@ public class ProductController {
 
     @DeleteMapping("/{id}")
     public GlobalResponse<Map<String, String>> delete(@PathVariable Long id) {
-        service.delete(id);
-        return GlobalResponse.success(Map.of("message", "Product deleted"));
+                service.delete(id);
+                return GlobalResponse.successMessage("Product deleted");
     }
 }

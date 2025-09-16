@@ -26,10 +26,9 @@ public class GlobalResponse<T> {
     public static <T> GlobalResponse<T> success(T data) {
         return new GlobalResponse<>(data);
     }
-    public static <T> GlobalResponse<T> message(String msg) {
-        return new GlobalResponse<>(List.of(new ErrorItem(msg)));
+    public static GlobalResponse<java.util.Map<String,String>> successMessage(String msg) {
+                return success(java.util.Map.of("message", msg));
     }
-
 
 }
 
