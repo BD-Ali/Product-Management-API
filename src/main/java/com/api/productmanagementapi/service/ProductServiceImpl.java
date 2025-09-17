@@ -81,8 +81,7 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public void delete(Long id) {
         if (!repo.existsById(id)) {
-            throw CustomResponseException.ResourceNotFound("Product with id " + id + " not found");
-        }
+            throw CustomResponseException.ResourceNotFound("Product with id " + id + " not found");        }
         repo.deleteById(id);
     }
 }
