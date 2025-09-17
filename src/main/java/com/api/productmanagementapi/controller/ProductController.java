@@ -1,6 +1,7 @@
 package com.api.productmanagementapi.controller;
 
 import com.api.productmanagementapi.dtos.ProductCreate;
+import com.api.productmanagementapi.dtos.ProductPatch;
 import com.api.productmanagementapi.dtos.ProductUpdate;
 import com.api.productmanagementapi.entity.Product;
 import com.api.productmanagementapi.service.ProductService;
@@ -35,6 +36,7 @@ public class ProductController {
     public GlobalResponse<Product> create(@Valid @RequestBody ProductCreate req) {
         Product toSave = req.toEntity();
         Product saved = service.create(toSave);
+
         return GlobalResponse.success(saved);
     }
 
@@ -44,12 +46,24 @@ public class ProductController {
         Product toUpdate = new Product();
         req.applyTo(toUpdate);
         Product updated = service.update(id, toUpdate);
+
+        return GlobalResponse.success(updated);
+    }
+
+    @PatchMapping("/{id}")
+    public GlobalResponse<Product> patch(@PathVariable Long id,
+                                         @Valid @RequestBody ProductPatch req) {
+        Product existing = service.get(id);
+        req.applyPartially(existing);
+        Product updated = service.update(id, existing);
+
         return GlobalResponse.success(updated);
     }
 
     @DeleteMapping("/{id}")
     public GlobalResponse<Map<String, String>> delete(@PathVariable Long id) {
-                service.delete(id);
-                return GlobalResponse.successMessage("Product deleted");
+        service.delete(id);
+
+        return GlobalResponse.successMessage("Product deleted");
     }
 }
