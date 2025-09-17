@@ -3,7 +3,6 @@ package com.api.productmanagementapi.service;
 import com.api.productmanagementapi.entity.Product;
 import com.api.productmanagementapi.repository.ProductRepository;
 import com.api.productmanagementapi.shared.CustomResponseException;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -14,7 +13,7 @@ import java.util.List;
 public class ProductServiceImpl implements ProductService {
     private final ProductRepository repo;
 
-    public ProductServiceImpl(@Qualifier("productRepository") ProductRepository repo) {
+    public ProductServiceImpl(ProductRepository repo) {
         this.repo = repo;
     }
 
@@ -26,8 +25,8 @@ public class ProductServiceImpl implements ProductService {
     @Override
     public Product get(Long id) {
         return repo.findById(id)
-                .orElseThrow(() ->
-                        CustomResponseException.ResourceNotFound("Product with id " + id + " not found"));
+                .orElseThrow(() -> CustomResponseException.ResourceNotFound(
+                                        "Product with id " + id + " not found"));
     }
 
     @Override
