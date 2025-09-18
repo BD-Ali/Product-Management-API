@@ -20,7 +20,6 @@ public record ProductPatch(
         @Min(value = 0, message = "Quantity cannot be negative")
         Integer quantity
 ) {
-    /** Apply only non-null fields to the target entity (in-place mutate). */
     public void applyPartially(Product target) {
         if (name != null) target.setName(name);
         if (price != null) target.setPrice(price);
