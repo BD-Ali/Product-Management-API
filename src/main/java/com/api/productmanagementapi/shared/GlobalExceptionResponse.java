@@ -50,11 +50,13 @@ public class GlobalExceptionResponse {
         var errors = List.of(new GlobalResponse.ErrorItem("Invalid parameter: " + ex.getName()));
         return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
     }
+
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<GlobalResponse<?>> handleConflict(DataIntegrityViolationException ex) {
-                var errors = List.of(new GlobalResponse.ErrorItem("Data conflict"));
-                return ResponseEntity.status(HttpStatus.CONFLICT).body(new GlobalResponse<>(errors));
-            }
+        var errors = List.of(new GlobalResponse.ErrorItem("Data conflict"));
+        return ResponseEntity.status(HttpStatus.CONFLICT).body(new GlobalResponse<>(errors));
+    }
+
     @ExceptionHandler(Exception.class)
     public ResponseEntity<GlobalResponse<?>> handleGenericException(Exception ex) {
         var errors = List.of(new GlobalResponse.ErrorItem("Internal server error"));
