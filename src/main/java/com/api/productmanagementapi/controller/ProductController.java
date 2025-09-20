@@ -7,7 +7,6 @@ import com.api.productmanagementapi.entity.Product;
 import com.api.productmanagementapi.service.ProductService;
 import com.api.productmanagementapi.shared.GlobalResponse;
 import org.springframework.web.bind.annotation.*;
-
 import jakarta.validation.Valid;
 import java.util.List;
 import java.util.Map;
