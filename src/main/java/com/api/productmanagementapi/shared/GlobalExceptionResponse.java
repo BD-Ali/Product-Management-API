@@ -44,11 +44,12 @@ public class GlobalExceptionResponse {
                 .toList();
         return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
     }
+
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<GlobalResponse<?>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
-                var errors = List.of(new GlobalResponse.ErrorItem("Invalid parameter: " + ex.getName()));
-                return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
-            }
+        var errors = List.of(new GlobalResponse.ErrorItem("Invalid parameter: " + ex.getName()));
+        return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
+    }
     @ExceptionHandler(DataIntegrityViolationException.class)
     public ResponseEntity<GlobalResponse<?>> handleConflict(DataIntegrityViolationException ex) {
                 var errors = List.of(new GlobalResponse.ErrorItem("Data conflict"));
