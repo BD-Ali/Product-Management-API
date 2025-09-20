@@ -1,7 +1,6 @@
 package com.api.productmanagementapi.service;
 
 import com.api.productmanagementapi.entity.Product;
-
 import java.util.List;
 
 public interface ProductService {

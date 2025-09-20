@@ -5,7 +5,6 @@ import com.api.productmanagementapi.repository.ProductRepository;
 import com.api.productmanagementapi.shared.CustomResponseException;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-
 import java.util.List;
 
 @Service
@@ -26,7 +25,7 @@ public class ProductServiceImpl implements ProductService {
     public Product get(Long id) {
         return repo.findById(id)
                 .orElseThrow(() -> CustomResponseException.ResourceNotFound(
-                                        "Product with id " + id + " not found"));
+                        "Product with id " + id + " not found"));
     }
 
     @Override

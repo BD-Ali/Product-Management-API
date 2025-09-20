@@ -5,7 +5,6 @@ import jakarta.validation.constraints.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.Setter;
-
 import java.math.BigDecimal;
 
 @Getter
@@ -14,9 +13,11 @@ import java.math.BigDecimal;
 @Entity
 @Table(name = "products")
 public class Product {
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
     @NotBlank(message = "name must not be blank")
     @Size(max = 100, message = "name must be at most 100 characters")
     @Column(nullable = false, unique = true, length = 100)
