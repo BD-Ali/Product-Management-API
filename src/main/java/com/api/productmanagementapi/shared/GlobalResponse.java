@@ -3,6 +3,7 @@ package com.api.productmanagementapi.shared;
 import lombok.Getter;
 import java.util.List;
 
+
 @Getter
 public class GlobalResponse<T> {
     private final String status;
