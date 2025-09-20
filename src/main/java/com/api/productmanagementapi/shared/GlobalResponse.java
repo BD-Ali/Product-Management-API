@@ -1,9 +1,7 @@
 package com.api.productmanagementapi.shared;
 
 import lombok.Getter;
-
 import java.util.List;
-
 
 @Getter
 public class GlobalResponse<T> {
@@ -18,14 +16,17 @@ public class GlobalResponse<T> {
         this.errors = errors;
         this.data = null;
     }
+
     public GlobalResponse(T data) {
         this.status = "success";
         this.data = data;
         this.errors = null;
     }
+
     public static <T> GlobalResponse<T> success(T data) {
         return new GlobalResponse<>(data);
     }
+
     public static GlobalResponse<java.util.Map<String,String>> successMessage(String msg) {
                 return success(java.util.Map.of("message", msg));
     }
