@@ -15,8 +15,7 @@ public record ProductUpdate(
         @NotNull(message = "Quantity is required")
         @Min(value = 0, message = "Quantity cannot be negative")
         Integer quantity
-)
-{
+) {
     public void applyTo(Product target) {
         target.setName(name);
         target.setPrice(price);
