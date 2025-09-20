@@ -28,20 +28,22 @@ public class GlobalExceptionResponse {
         var errors = List.of(new GlobalResponse.ErrorItem(ex.getMessage()));
         return new ResponseEntity<>(new GlobalResponse<>(errors), HttpStatus.valueOf(ex.getCode()) );
     }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
      public ResponseEntity<GlobalResponse<?>> handleBodyValidation(MethodArgumentNotValidException ex) {
         var errors = ex.getBindingResult().getFieldErrors().stream()
-                                .map(fe -> new GlobalResponse.ErrorItem(fe.getField() + ": " + fe.getDefaultMessage()))
-                                .toList();
-                return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
-            }
+                .map(fe -> new GlobalResponse.ErrorItem(fe.getField() + ": " + fe.getDefaultMessage()))
+                .toList();
+        return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
+     }
+
     @ExceptionHandler(ConstraintViolationException.class)
     public ResponseEntity<GlobalResponse<?>> handleConstraint(ConstraintViolationException ex) {
-                var errors = ex.getConstraintViolations().stream()
-                                .map(v -> new GlobalResponse.ErrorItem(v.getPropertyPath() + ": " + v.getMessage()))
-                                .toList();
-                return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
-            }
+        var errors = ex.getConstraintViolations().stream()
+                .map(v -> new GlobalResponse.ErrorItem(v.getPropertyPath() + ": " + v.getMessage()))
+                .toList();
+        return ResponseEntity.badRequest().body(new GlobalResponse<>(errors));
+    }
     @ExceptionHandler(MethodArgumentTypeMismatchException.class)
     public ResponseEntity<GlobalResponse<?>> handleTypeMismatch(MethodArgumentTypeMismatchException ex) {
                 var errors = List.of(new GlobalResponse.ErrorItem("Invalid parameter: " + ex.getName()));
