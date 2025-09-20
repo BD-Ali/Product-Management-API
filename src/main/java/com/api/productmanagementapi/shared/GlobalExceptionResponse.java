@@ -10,7 +10,6 @@ import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
 import org.springframework.web.method.annotation.MethodArgumentTypeMismatchException;
 import org.springframework.web.servlet.resource.NoResourceFoundException;
-
 import java.util.List;
 
 @RestControllerAdvice
@@ -62,6 +61,7 @@ public class GlobalExceptionResponse {
         var errors = List.of(new GlobalResponse.ErrorItem("Internal server error"));
         return new ResponseEntity<>(new GlobalResponse<>(errors), HttpStatus.INTERNAL_SERVER_ERROR);
     }
+
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<GlobalResponse<Void>> handleUnreadable(HttpMessageNotReadableException ex) {
         return ResponseEntity.badRequest()
