@@ -1,14 +1,54 @@
-# Product Management API
+<!-- Project badges -->
+<p align="center">
+  <img src="https://img.shields.io/badge/Spring%20Boot-REST%20API-6DB33F?logo=springboot&logoColor=white" alt="Spring Boot">
+  <img src="https://img.shields.io/badge/JPA-PostgreSQL-4169E1?logo=postgresql&logoColor=white" alt="PostgreSQL">
+  <img src="https://img.shields.io/badge/License-MIT-black" alt="MIT">
+  <img src="https://img.shields.io/badge/Docs-OpenAPI%2FSwagger-85EA2D?logo=swagger&logoColor=white" alt="Swagger">
+</p>
 
-A Spring Boot REST API for managing products with a consistent response wrapper, validation, DTO-based input models, and centralized error handling. The API exposes CRUD + PATCH endpoints under `/api/products` and persists data with Spring Data JPA (PostgreSQL driver included). OpenAPI/Swagger UI is enabled.
+<h1 align="center">🛍️ Product Management API</h1>
+<p align="center">
+  A clean Spring Boot REST API with DTOs, validation, a standardized response wrapper, and centralized error handling.
+</p>
 
-## Tech stack
-- Spring Boot (Web, Validation, Data JPA)
-- PostgreSQL driver
-- Springdoc OpenAPI UI
-- Spring Boot Actuator
+---
 
-## Project structure
+## 🔎 Overview
+
+- CRUD + **PATCH** endpoints under <code>/api/products</code>  
+- **DTOs** for input/output (entity not exposed): <code>ProductCreate</code>, <code>ProductUpdate</code>, <code>ProductPatch</code>  
+- **GlobalResponse&lt;T&gt;** wrapper for consistent <em>success / error</em> shapes  
+- **Validation** on inputs and **@ControllerAdvice** for errors  
+- **Spring Data JPA** + PostgreSQL driver  
+- **OpenAPI/Swagger UI** enabled
+
+---
+
+## 📑 Table of Contents
+
+- [Tech Stack](#-tech-stack)
+- [Project Structure](#-project-structure)
+- [API Summary](#-api-summary)
+- [Request Models (DTOs)](#-request-models-dtos)
+- [Response Shape](#-response-shape)
+- [Validation & Error Handling](#-validation--error-handling)
+- [Run Locally](#-run-locally)
+- [OpenAPI / Swagger](#-openapi--swagger)
+- [License](#-license)
+
+---
+
+## 🧱 Tech Stack
+
+- **Spring Boot** (Web, Validation, Data JPA)  
+- **PostgreSQL** JDBC driver  
+- **springdoc-openapi** (Swagger UI)  
+- **Maven**
+
+---
+
+## 🗂️ Project Structure
+
 ```
 src/main/java/com/api/productmanagementapi
 ├── ProductManagementApiApplication.java
@@ -30,50 +70,97 @@ src/main/java/com/api/productmanagementapi
     ├── GlobalExceptionResponse.java
     └── GlobalResponse.java
 ```
-> **Note**: The `shared` package contains three files: a generic response wrapper, the global exception handler, and a custom exception type used for domain errors.
 
-## API endpoints (base path: `/api/products`)
+> The <code>shared</code> package includes a generic response wrapper, a global exception handler, and a custom exception type.
 
-| Method | Endpoint               | Description               | Request body           | Response body             |
-|-------:|------------------------|---------------------------|------------------------|---------------------------|
-| GET    | `/api/products`        | List all products         | –                      | `GlobalResponse<List<Product>>` |
-| GET    | `/api/products/{id}`   | Get product by id         | –                      | `GlobalResponse<Product>` |
-| POST   | `/api/products`        | Create a product          | `ProductCreate`        | `GlobalResponse<Product>` |
-| PUT    | `/api/products/{id}`   | Replace a product         | `ProductUpdate`        | `GlobalResponse<Product>` |
-| PATCH  | `/api/products/{id}`   | Partially update product  | `ProductPatch`         | `GlobalResponse<Product>` |
-| DELETE | `/api/products/{id}`   | Delete a product          | –                      | `GlobalResponse<{message}>` |
+---
 
-### Request models (DTOs)
+## 🚦 API Summary
 
-- **`ProductCreate`**
-  - `name` — required; not blank; max 100 chars
-  - `price` — required; decimal ≥ 0; up to 10 integer digits and 2 fraction digits
-  - `quantity` — required; integer ≥ 0 and ≤ 1,000,000
-  - Method: `toEntity()` → `Product`
+> Base path: <code>/api/products</code>
 
-- **`ProductUpdate`**
-  - Same constraints as `ProductCreate`
-  - Method: `applyTo(Product target)`
+| Method | Endpoint                | Purpose                    |
+|------: |-------------------------|----------------------------|
+| GET    | `/api/products`         | List all products          |
+| GET    | `/api/products/{id}`    | Get one product by id      |
+| POST   | `/api/products`         | Create a product           |
+| PUT    | `/api/products/{id}`    | Replace a product          |
+| PATCH  | `/api/products/{id}`    | Partially update a product |
+| DELETE | `/api/products/{id}`    | Delete a product           |
 
-- **`ProductPatch`** (all fields optional; only apply non-null)
-  - `name` — if present, must not be blank
-  - `price` — if present, decimal ≥ 0
-  - `quantity` — if present, integer ≥ 0
-  - Method: `applyPartially(Product target)`
+<details>
+<summary><strong>Sample create (POST)</strong></summary>
 
-### Entity
-- **`Product`**
-  - Fields: `id`, `name`, `price`, `quantity`
+```http
+POST /api/products
+Content-Type: application/json
 
-## Response format
+{
+  "name": "Laptop",
+  "price": 699.99,
+  "quantity": 10
+}
+```
+</details>
 
-All endpoints return a `GlobalResponse<T>`:
+<details>
+<summary><strong>Sample success response</strong></summary>
+
+```json
+{
+  "status": "SUCCESS",
+  "data": {
+    "id": 1,
+    "name": "Laptop",
+    "price": 699.99,
+    "quantity": 10
+  }
+}
+```
+</details>
+
+---
+
+## 📨 Request Models (DTOs)
+
+```java
+// ProductCreate.java
+class ProductCreate {
+  String name;       // @NotBlank @Size(max = 100)
+  BigDecimal price;  // @NotNull @DecimalMin("0.00") @Digits(integer = 10, fraction = 2)
+  Integer quantity;  // @NotNull @Min(0) @Max(1_000_000)
+}
+```
+
+```java
+// ProductUpdate.java (replace semantics, same constraints as create)
+class ProductUpdate {
+  String name;
+  BigDecimal price;
+  Integer quantity;
+}
+```
+
+```java
+// ProductPatch.java (partial update; only non-null fields applied)
+class ProductPatch {
+  String name;       // if present, must not be blank
+  BigDecimal price;  // if present, >= 0
+  Integer quantity;  // if present, >= 0
+}
+```
+
+---
+
+## 📦 Response Shape
+
+All endpoints return **GlobalResponse&lt;T&gt;**:
 
 ```json
 // success
 {
   "status": "SUCCESS",
-  "data": { /* T */ }
+  "data": { /* payload */ }
 }
 ```
 ```json
@@ -86,35 +173,49 @@ All endpoints return a `GlobalResponse<T>`:
 }
 ```
 
-Utility factory methods:
-- `GlobalResponse.success(data)`
-- `GlobalResponse.successMessage("...")`
+---
 
-## Validation & error handling
+## 🧯 Validation & Error Handling
 
-Centralized handler (`GlobalExceptionResponse`) maps common problems to structured error responses:
-- `CustomResponseException` → HTTP status from the exception (e.g., not found for missing resources)
-- `MethodArgumentNotValidException` (body validation errors) → `400 Bad Request`
-- `ConstraintViolationException` (path/query validations) → `400 Bad Request`
-- `MethodArgumentTypeMismatchException` (wrong param types) → `400 Bad Request`
-- `DataIntegrityViolationException` (DB conflicts) → `409 Conflict`
-- Generic `Exception` → `500 Internal Server Error`
+Centralized handler **GlobalExceptionResponse** maps common problems to structured errors:
 
-All error responses use `GlobalResponse` with an `errors` array of `{ message }` items.
+- `CustomResponseException` → HTTP status from the exception (e.g. 404 for missing id)  
+- `MethodArgumentNotValidException` / `ConstraintViolationException` → **400 Bad Request** (validation details)  
+- `MethodArgumentTypeMismatchException` → **400 Bad Request** (wrong param types)  
+- `DataIntegrityViolationException` → **409 Conflict** (DB constraint)  
+- Generic `Exception` → **500 Internal Server Error**  
 
-## OpenAPI / Swagger
+All error payloads use `GlobalResponse` with an `errors` array of `{ "message": "..." }` items.
 
-Springdoc is included. Once the app is running, the documentation UI is available at:
+---
 
-- `http://localhost:8080/swagger-ui.html` (redirects to `/swagger-ui/index.html`)
-- Raw spec: `http://localhost:8080/v3/api-docs`
+## ▶️ Run Locally
 
-## Running locally
-
-Using the Maven wrapper:
-
-```bash
-./mvnw spring-boot:run
+1) Configure datasource in `src/main/resources/application.properties`:
+```properties
+spring.datasource.url=jdbc:postgresql://localhost:5432/storedb
+spring.datasource.username=product_user
+spring.datasource.password=product_pass
+spring.jpa.hibernate.ddl-auto=update
 ```
 
-> The project includes the PostgreSQL JDBC driver; configure your datasource in `application.properties` as appropriate for your environment.
+2) Start the app:
+```bash
+./mvnw spring-boot:run
+# http://localhost:8080
+```
+
+---
+
+## 📘 OpenAPI / Swagger
+
+Once running:
+
+- Swagger UI → `http://localhost:8080/swagger-ui.html`  
+- OpenAPI JSON → `http://localhost:8080/v3/api-docs`
+
+---
+
+## 🪪 License
+
+This project is licensed under the **MIT License**.
